@@ -17,6 +17,18 @@ public class Matrix {
             I[i][i] = 1;
         return I;
     }
+    
+    
+ // return m-by-n matrix of 1s
+    public static double[][] one(int m, int n) {
+        double[][] I = new double[m][n];
+        for (int i = 0; i < m; i++)
+        	for (int j = 0; j < n; j++)
+        		I[i][j] = 1;
+        return I;
+    }
+    
+    
 
     // return x^T y
     public static double dot(double[] x, double[] y) {
@@ -32,10 +44,16 @@ public class Matrix {
     public static double[][] dot(double x, double[][] y) {
         int m = y.length;
         int n = y[0].length;
+        double d;
         double[][] C = new double[m][n];
-        for (int i = 0; i < m; i++)
-            for (int j = 0; j < n; j++)
-                C[i][j] = x * y[i][j];
+        for (int i = 0; i < m; i++){
+            for (int j = 0; j < n; j++){
+//            	d = x * y[i][j];
+//        		double rounded = (double) Math.round(d * 100) / 100;
+//                C[i][j] = rounded;
+            	C[i][j] = x * y[i][j];
+            }
+        }
         return C;
     }
     
@@ -71,19 +89,64 @@ public class Matrix {
                 C[i][j] = A[i][j] - B[i][j];
         return C;
     }
+    
+    
+    // print a matrix
+    public static void printMatrix(double[][] A) {
+        int m = A.length;
+        int n = A[0].length;
+        for (int i = 0; i < m; i++){
+        	for (int j = 0; j < n; j++)
+                System.out.print(A[i][j] + " ");
+        	System.out.print("\n");
+//            System.out.print("\n");
+        }
+    }
+    
+ // round-off a matrix
+    public static double[][] roundOffMatrix(double[][] A) {
+        int m = A.length;
+        int n = A[0].length;
+        double[][] C = new double[m][n];
+        for (int i = 0; i < m; i++){
+        	for (int j = 0; j < n; j++)
+        		C[i][j] = (double) Math.round((A[i][j]) * 100) / 100;
+        }
+        return C;
+    }
+    
+ // return C = A - B
+    public static boolean checkVals(double[][] A, double err) {
+        int m = A.length;
+        int n = A[0].length;
+        for (int i = 0; i < m; i++)
+            for (int j = 0; j < n; j++)
+                if (A[i][j] > Math.abs(err))
+                		return false;
+        return true;
+    }
+    
+    
 
     // return C = A * B
     public static double[][] multiply(double[][] A, double[][] B) {
         int mA = A.length;
         int nA = A[0].length;
         int mB = B.length;
-        int nB = A[0].length;
+        int nB = B[0].length;
         if (nA != mB) throw new RuntimeException("Illegal matrix dimensions.");
         double[][] C = new double[mA][nB];
+        double d;
         for (int i = 0; i < mA; i++)
+        {
+//        	System.out.println("i: " + i);
             for (int j = 0; j < nB; j++)
+            {
+//            	System.out.print("j: " + j + " ");
                 for (int k = 0; k < nA; k++)
                     C[i][j] += (A[i][k] * B[k][j]);
+            }
+        }
         return C;
     }
 
@@ -114,40 +177,40 @@ public class Matrix {
 
     // test client
     public static void main(String[] args) {
-        System.out.println("D");
-        System.out.println("--------------------");
-        double[][] d = { { 1, 2, 3 }, { 4, 5, 6 }, { 9, 1, 3} };
-//        StdArrayIO.print(d);
-        System.out.println();
-
-        System.out.println("I");
-        System.out.println("--------------------");
-        double[][] c = Matrix.identity(5);
-//        StdArrayIO.print(c);
-        System.out.println();
-
-        System.out.println("A");
-        System.out.println("--------------------");
-        double[][] a = Matrix.random(5, 5);
-//        StdArrayIO.print(a);
-        System.out.println();
-
-        System.out.println("A^T");
-        System.out.println("--------------------");
-        double[][] b = Matrix.transpose(a);
-//        StdArrayIO.print(b);
-        System.out.println();
-
-        System.out.println("A + A^T");
-        System.out.println("--------------------");
-        double[][] e = Matrix.add(a, b);
-//        StdArrayIO.print(e);
-        System.out.println();
-
-        System.out.println("A * A^T");
-        System.out.println("--------------------");
-        double[][] f = Matrix.multiply(a, b);
-//        sStdArrayIO.print(f);
-        System.out.println();
+//        System.out.println("D");
+//        System.out.println("--------------------");
+//        double[][] d = { { 1, 2, 3 }, { 4, 5, 6 }, { 9, 1, 3} };
+////        StdArrayIO.print(d);
+//        System.out.println();
+//
+//        System.out.println("I");
+//        System.out.println("--------------------");
+//        double[][] c = Matrix.identity(5);
+////        StdArrayIO.print(c);
+//        System.out.println();
+//
+//        System.out.println("A");
+//        System.out.println("--------------------");
+//        double[][] a = Matrix.random(5, 5);
+////        StdArrayIO.print(a);
+//        System.out.println();
+//
+//        System.out.println("A^T");
+//        System.out.println("--------------------");
+//        double[][] b = Matrix.transpose(a);
+////        StdArrayIO.print(b);
+//        System.out.println();
+//
+//        System.out.println("A + A^T");
+//        System.out.println("--------------------");
+//        double[][] e = Matrix.add(a, b);
+////        StdArrayIO.print(e);
+//        System.out.println();
+//
+//        System.out.println("A * A^T");
+//        System.out.println("--------------------");
+//        double[][] f = Matrix.multiply(a, b);
+////        sStdArrayIO.print(f);
+//        System.out.println();
     }
 }

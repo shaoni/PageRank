@@ -103,6 +103,18 @@ public class Matrix {
         }
     }
     
+    
+ // print a matrix
+    public static void printMatrix(double[] A) {
+        int m = A.length;
+        for (int i = 0; i < m; i++){
+        	    System.out.print(A[i] + " ");
+        	System.out.print("\n");
+//            System.out.print("\n");
+        }
+    }
+    
+    
  // round-off a matrix
     public static double[][] roundOffMatrix(double[][] A) {
         int m = A.length;
@@ -114,6 +126,20 @@ public class Matrix {
         }
         return C;
     }
+    
+    /**Converts a n X 1 array to a 1D array*/
+    public static double[] twoD_to_oneD(double[][]A){
+    	int m = A.length;
+    	int n = A[0].length;
+    	double[] C = new double[m];
+    	for (int i = 0; i < m; i++){
+        	for (int j = 0; j < n; j++)
+        		C[i] = A[i][j];
+        }
+        return C;
+    }
+    
+    
     
  // return C = A - B
     public static boolean checkVals(double[][] A, double err) {

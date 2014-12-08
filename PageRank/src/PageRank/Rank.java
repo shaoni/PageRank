@@ -1,14 +1,21 @@
 package PageRank;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+
 public class Rank {
 	
+	/**Number of nodes of the directed graph*/
 	public static int NUM_NODES = 6;
 	
-//	private double[][] array;
-	private double myDampingFactor = .85;
+	/**Damping factor (1-p) = 0.85
+	 * p = 0.15
+	 * */
+	private double myDampingFactor = 0.15;
 	
 	/***/
-	public void pageRank(double[][] A){
+	public double[][] pageRank(double[][] A){
 		double[][] B = initialize_B();
 //		System.out.print("B matrix: \n");
 //		Matrix.printMatrix(B);
@@ -31,8 +38,7 @@ public class Rank {
 			newRanks = Matrix.multiply(powerOfM, V);
 			converged = checkConvergence(prevRanks, newRanks, 0.001);
 		}
-		System.out.print("Ranks are: \n");
-		Matrix.printMatrix(Matrix.roundOffMatrix(newRanks));
+		return newRanks;
 
 	}
 	/** [ M = (1 - p).A  + p.B ] 
@@ -48,11 +54,8 @@ public class Rank {
 	
 	public double[][] initialize_B(){
 		double[][] b = Matrix.one(NUM_NODES, NUM_NODES);
-//		System.out.println("B matrix before : ");
-//		Matrix.printMatrix(b);
 		double d = (1.0/NUM_NODES);
 		double rounded = (double) Math.round(d * 100) / 100;
-//		System.out.print("1/numnodes " + rounded);
 		return Matrix.dot(rounded, b);	
 	}
 	
@@ -68,12 +71,50 @@ public class Rank {
 		return Matrix.checkVals(diff, errorMargin);
 		
 	}
+	
+	public static void printRankedOrder(double[] R){
+		HashMap<Double, Integer> m = mapRanks(R);
+		HashMap<Integer, String> s = mapNodes();
+		Arrays.sort(R);
+		System.out.println("Ranked Nodes are : ");
+		for(int i = (R.length - 1); i>= 0; i--){
+//			System.out.println("R[i] = " + R[i]);
+//			System.out.println("R[i]'s node = " + m.get(R[i]));
+			double rounded = (double) Math.round(R[i] * 100) / 100;
+			System.out.println("Node " + s.get(m.get(R[i]) + 1) + " ---> " + rounded);
+			
+		}
+		
+	}
+	
+	public static HashMap<Integer, String> mapNodes(){
+		HashMap<Integer, String> map = new HashMap<Integer, String>();
+		map.put(1, "A");
+		map.put(2, "B");
+		map.put(3, "C");
+		map.put(4, "D");
+		map.put(5, "E");
+		map.put(6, "F");
+		return map;
+	}
+	
+	public static HashMap<Double, Integer> mapRanks(double[] R){
+		HashMap<Double, Integer> map = new HashMap<Double, Integer>();
+		int r = R.length;
+		for(int i = 0; i<r; i++){
+		map.put(R[i], i);
+		}
+		return map;
+	}
+	
+	
 		
 
 	
 	
 public static void main(String[] args){
 	
+	/**The transition matrix derived from the test-graph*/
 	double[][] arr1 = new double[][]{
 			  { 0.00, 0.00, 0.00, 0.00, 0.00, 0},
 			  { 1.00, 0.00, 0.33, 0.33, 0.25, 0},
@@ -83,17 +124,11 @@ public static void main(String[] args){
 			  { 0.00, 0.00, 0.00, 0.00, 0.25, 0}
 	};
 	
-	double[][] arr2 = new double[][]{
-			  { 0, 1, 0, 0, 0, 0},
-			  { 0, 0, 1, 1, 1, 0},
-			  { 0, 1, 0, 1, 1, 0},
-			  { 0, 1, 1, 0, 1, 0},
-			  { 0, 1, 1, 1, 0, 1},
-			  { 0, 0, 0, 0, 0, 0}
-	};
 	
 	Rank r = new Rank();
-	r.pageRank(arr1);
+	double[][] twoD = r.pageRank(arr1);
+	double[] oneD = Matrix.twoD_to_oneD(twoD);
+	printRankedOrder(oneD);
 }
 	
 }
